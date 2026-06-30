@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Hazzy Calculator</title>
+    <link rel="icon" type="image/jpg" href="https://avatars.akamai.steamstatic.com/5ff7b63f91463da9596d34396c05a499edc0ca79_medium.jpg">
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        input, select, button { padding: 10px; font-size: 16px; margin: 5px; }
+        .result { font-size: 24px; color: green; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <img src="https://i.pinimg.com/236x/13/ec/7a/13ec7a3330a09a775c0d5090b60807ce.jpg?nii=t" alt="Хаззи" width="300">
+    <h1>Hazzy calculator</h1>
+
+    <form action="/calculate" method="POST">
+        <div style="margin-bottom: 15px;">
+            <label>
+                <input type="radio" name="mode" value="standard" onchange="this.form.submit()" {% if mode =='standard' %}checked{% endif %}> Standard
+            </label>
+            <label>
+                <input type="radio" name="mode" value="trig" onchange="this.form.submit()" {% if mode =='trig' %}checked{% endif %}> Trigonometric
+            </label>
+        </div>
+
+        <div>
+            <label>
+                <input type="number" step="any" name="x" placeholder="Number X" required>
+            </label>
+
+            <!-- Поле Y показываем только если выбран Standard mode -->
+            {% if mode == 'standard' %}
+            <label>
+                <input type="number" step="any" name="y" placeholder="Number Y">
+            </label>
+            {% endif %}
+
+            <label>
+                <select name="operation">
+                    <!-- Стандартные операции показываем только в Standard режиме -->
+                    {% if mode == 'standard' %}
+                        <option value="sum">+</option>
+                        <option value="sub">-</option>
+                        <option value="mult">*</option>
+                        <option value="div">/</option>
+                        <option value="pow">^</option>
+                        <option value="root">√</option>
+                    {% endif %}
+
+                    <!-- Тригонометрические операции показываем только в Trig режиме -->
+                    {% if mode == 'trig' %}
+                        <option value="sin">Sin</option>
+                        <option value="cos">Cos</option>
+                        <option value="tan">Tan</option>
+                        <option value="cot">Cot</option>
+                    {% endif %}
+                </select>
+            </label>
+
+            <button type="submit">Calculate</button>
+        </div>
+    </form>
+
+    {% if result %}
+        <div class="result">Result: {{ result }}</div>
+    {% endif %}
+
+    <!-- СКРИПТ ВСТАВЛЕН СЮДА, ПЕРЕД ЗАКРЫВАЮЩИМ /BODY -->
+    <script>
+        // Получаем элементы
+        const radioStandard = document.querySelector('input[value="standard"]');
+        const radioTrig = document.querySelector('input[value="trig"]');
+        const inputY = document.querySelector('input[name="y"]');
+        const selectOp = document.querySelector('select[name="operation"]');
+
+        // Функция обновления интерфейса
+        function updateUI() {
+            if (radioStandard.checked) {
+                // Показываем Y и стандартные операции
+                inputY.style.display = 'inline-block';
+                selectOp.innerHTML = `
+                    <option value="sum">+</option>
+                    <option value="sub">-</option>
+                    <option value="mult">*</option>
+                    <option value="div">/</option>
+                    <option value="pow">^</option>
+                    <option value="root">√</option>
+                `;
+            } else {
+                // Прячем Y и показываем тригонометрию
+                inputY.style.display = 'none';
+                selectOp.innerHTML = `
+                    <option value="sin">Sin (x)</option>
+                    <option value="cos">Cos (x)</option>
+                    <option value="tan">Tan (x)</option>
+                    <option value="cot">Cot (x)</option>
+                `;
+            }
+        }
+
+        // Вешаем обработчики на нажатие кнопок
+        radioStandard.addEventListener('change', updateUI);
+        radioTrig.addEventListener('change', updateUI);
+
+        // Запускаем один раз при загрузке, чтобы всё встало на свои места
+        updateUI();
+    </script>
+</body>
+</html>
