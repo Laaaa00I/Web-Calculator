@@ -73,26 +73,26 @@ class Root(Operation):
 
 class Sin(Operation):
     def calculate(self):
-        return math.sin(math.radians(self.x))
+        return math.sin(self.x)
 #^^^ Sine operation (sin x)
 #Ru: Операция синуса (синус из x)
 
 class Cos(Operation):
     def calculate(self):
-        return math.cos(math.radians(self.x))
+        return math.cos(self.x)
 #^^^ Cosine operation (cos x)
 #Ru: Операция косинуса (косинус из x)
 
 class Tan(Operation):
     def calculate(self):
-        return math.tan(math.radians(self.x))
+        return math.tan(self.x)
 #^^^ Tangent operation (tan x)
 #Ru: Операция тангенс (тангенс из x)
 
 class Cot(Operation):
     def calculate(self):
         try:
-            return 1 / math.tan(math.radians(self.x))
+            return 1 / math.tan(self.x)
         except ZeroDivisionError:
             raise ZeroDivisionError("cotangent is undefined")
 #^^^ Cotangent operations (cot x)
